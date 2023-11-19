@@ -1,7 +1,11 @@
 package api.Requests;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
+import api.POJO.CreatePatient_Payload;
 import api.POJO.User_Payload;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -35,6 +39,37 @@ public class User_HTTPReq {
 		
 		return response;
 		
+	}
+	
+	public static Response createPatient(CreatePatient_Payload CreatePatient_Payload, String oAuthtoken)
+	{
+		String PostCreateNewPatient=getUrl().getString("PostCreateNewPatient");
+		File report=new File(".\\TesdData\\HyperThyroid_Report_final (1).pdf");
+		
+		 Map<String, Object> patientInfo = new HashMap<>();
+	        patientInfo.put("FirstName",CreatePatient_Payload.getFirstName() );
+	        patientInfo.put("LastName", CreatePatient_Payload.getLastName());
+	        patientInfo.put("ContactNumber", CreatePatient_Payload.getContactNumber());
+	        patientInfo.put("Email", CreatePatient_Payload.getEmail());
+	        patientInfo.put("Allergy", CreatePatient_Payload.getAllergy());
+	        patientInfo.put("FoodCategory", CreatePatient_Payload.getFoodCategory());
+	        patientInfo.put("DateOfBirth", CreatePatient_Payload.getDateOfBirth());
+		
+		response=RestAssured.given(requestSpecification).auth().oauth2(oAuthtoken)
+		.multiPart("file",report)
+		.multiPart("patientInfo",patientInfo)
+		.contentType("multipart/form-data")
+		.log().all()
+		.when().post(PostCreateNewPatient).then().log().all().extract().response();
+		
+		return response;
+	}
+	
+	public static Response getAllPatients(String oAuthtoken)
+	{
+		String GetallPatients= getUrl().getString("GetallPatients");
+		return response=RestAssured.given(requestSpecification).auth().oauth2(oAuthtoken)
+		.when().get(GetallPatients).then().log().all().extract().response();
 	}
 
 }
