@@ -34,6 +34,14 @@ Examples:
 
 Scenario: Verify user unable to retrieve the morbidity condition by invalid Test name
 Given User was authorized by token to make dietician request
-When User sends HTTP request for morbidity with "TSH67678"
+When User sends HTTP request for morbidity with "<morbidityInvalidTestName>"
 Then Verify user receives 404 status
 	And Verify morbidity response data with invalid TestName
+
+Examples:
+|morbidityInvalidTestName|
+|TSH2353|
+|BloodertcPressure Levels|
+|T41443|
+|567878T3|
+|Averageer3Glucose|
