@@ -69,6 +69,13 @@ public class CreateUser_TestCase {
 		return token;
 	}
 	
+	 //Authorization method withoutargument
+	
+		public String getDieticianToken()
+		{
+			return token_Dietician;
+		}
+	
  // Status verification
 	
 	public void verify_post_status(int actual_statusCode)
