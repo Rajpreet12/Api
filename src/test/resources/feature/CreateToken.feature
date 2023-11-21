@@ -11,17 +11,12 @@ Examples:
 |userToken|0|
 |userToken|1|
 
-
 Scenario: Create patient by dietician
 Given User was authorized by "token" 
 When User sends HTTP request with  request payload and under form-Data
 Then User receives 200 status
 
-
-
-
 Scenario: Get request to fetch all patients
-
 Given User was authorized by "token"
 When user sends HTTP request with valid endpoints "endpoints" for all patients
 Then User receives 200 status
