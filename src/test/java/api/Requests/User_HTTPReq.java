@@ -1,5 +1,6 @@
 package api.Requests;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class User_HTTPReq {
 	{
 		String PostCreateNewPatient=getUrl().getString("PostCreateNewPatient");
 		File report=new File(".\\TesdData\\HyperThyroid_Report_final (1).pdf");
-		
+ //	Create the patientInfo object	
 		 Map<String, Object> patientInfo = new HashMap<>();
 	        patientInfo.put("FirstName",CreatePatient_Payload.getFirstName() );
 	        patientInfo.put("LastName", CreatePatient_Payload.getLastName());
@@ -65,11 +66,60 @@ public class User_HTTPReq {
 		return response;
 	}
 	
+//Get All PAtients
+	
 	public static Response getAllPatients(String oAuthtoken)
 	{
 		String GetallPatients= getUrl().getString("GetallPatients");
 		return response=RestAssured.given(requestSpecification).auth().oauth2(oAuthtoken)
-		.when().get(GetallPatients).then().log().all().extract().response();
+		.when().get(GetallPatients).then()
+		.log().all().extract().response();
 	}
+	
+ //Get Patients Morbidity Details
+	
+	public static Response get_morbidity(String endpoints,String patientId, String oAuthtoken )
+	{
+		 System.out.println("The vlue of token is "+oAuthtoken);
+		//String GetPatientsMorbidity= getUrl().getString("GetPatientsMorbidity");
+		return response=RestAssured.given(requestSpecification).auth().oauth2(oAuthtoken)
+		.when().get(endpoints+patientId);
+		
+	}
+	
+ // Update patient by UserId
+	public static Response createPatient_UpdatePatient(String updatedJson, String oAuthtoken, String patientId)
+	{
+		String PutUpdatePatientByUserID=getUrl().getString("PutUpdatePatientByUserID");
+		File report=new File(".\\TesdData\\HyperThyroid_Report_final (1).pdf");
+
+		response=RestAssured.given(requestSpecification).auth().oauth2(oAuthtoken)
+		.multiPart("file",report)
+		.multiPart("patientInfo",updatedJson)
+		.contentType("multipart/form-data")
+		.log().all()
+		.when().put(PutUpdatePatientByUserID+patientId).then().log().all().extract().response();
+		
+		return response;
+	}
+	
+//Delete PAtient by Id
+	
+		public static Response delete_PatientId(String oAuthtoken,String patientId)
+		{
+			String DeletePatient= getUrl().getString("DeletePatient");
+			return response=RestAssured.given(requestSpecification).auth().oauth2(oAuthtoken)
+			.when().delete(DeletePatient+patientId).then()
+			.log().all().extract().response();
+		}
+		
+//User Logout
+		public static Response userLogout(String oAuthtoken)
+		{
+			String UserLogout= getUrl().getString("UserLogout");
+			return response=RestAssured.given(requestSpecification).auth().oauth2(oAuthtoken)
+			.when().get(UserLogout).then()
+			.log().all().extract().response();
+		}
 
 }

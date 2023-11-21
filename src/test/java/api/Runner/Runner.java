@@ -17,9 +17,10 @@ import io.cucumber.junit.CucumberOptions;
 			"io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm",
 				"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"},
 		dryRun=false
+		//tags="@token and @Patient_Morbidity_Details"
 		
 		
 		)
 public class Runner {
 
-}
+} 
